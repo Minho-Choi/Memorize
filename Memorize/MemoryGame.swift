@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
     var cards: Array<Card>
+    var score: Int = 0
     var indexOfTheOneAndOnlyFaceUpCard: Int? {
         get { cards.indices.filter { cards[$0].isFaceUp }.only }
         set {
@@ -25,6 +27,19 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    score += 2
+                } else {    // not matching case
+                    if cards[chosenIndex].isSeen && cards[potentialMatchIndex].isSeen {
+                        score -= 2
+                    }
+                    else if cards[chosenIndex].isSeen || cards[potentialMatchIndex].isSeen {
+                        score -= 1
+                        cards[chosenIndex].isSeen = true
+                        cards[potentialMatchIndex].isSeen = true
+                    } else {
+                        cards[chosenIndex].isSeen = true
+                        cards[potentialMatchIndex].isSeen = true
+                    }
                 }
                 cards[chosenIndex].isFaceUp = true
             } else {
@@ -46,7 +61,28 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var isSeen: Bool = false
         var content: CardContent
         var id : Int
     }
+}
+
+struct Theme<CardContent>{
+    let name: String
+    let emojis: Array<CardContent>
+    var numberOfCardsToShow: Int?
+    let color: Color
+    
+    init(name: String, emojis: Array<CardContent>, color: Color) {
+        self.name = name
+        self.emojis = emojis
+        self.color = color
+        self.numberOfCardsToShow = nil
+    }
+    
+    init(name: String, emojis: Array<CardContent>, numberOfCardsToShow: Int, color: Color) {
+        self.init(name: name, emojis: emojis, color: color)
+        self.numberOfCardsToShow = numberOfCardsToShow
+    }
+    
 }
