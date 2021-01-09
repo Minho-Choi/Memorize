@@ -10,7 +10,7 @@ import SwiftUI
 class EmojiMemoryGame: ObservableObject {
     @Published private var model: MemoryGameWrapper<String> = EmojiMemoryGame.createMemoryGame()
     
-    static let stringThemes: Array<Theme<String>> = [
+    private static let stringThemes: Array<Theme<String>> = [
         Theme<String>(name: "Halloween", emojis: ["🎃","🕷","👻","🦇","🕯"], color: Color.orange),
         Theme<String>(name: "Faces", emojis: ["😀","😃","🤣","🥰","🤪","😎"], color: Color.yellow),
         Theme<String>(name: "Sports", emojis: ["⚽️","🏀","🏈","⚾️","🎱","🎾"], color: Color.blue),
