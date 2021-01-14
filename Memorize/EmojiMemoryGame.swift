@@ -10,17 +10,18 @@ import SwiftUI
 class EmojiMemoryGame: ObservableObject {
     @Published private var model: MemoryGameWrapper<String> = EmojiMemoryGame.createMemoryGame()
     
-    private static let stringThemes: Array<Theme<String>> = [
-        Theme<String>(name: "Halloween", emojis: ["🎃","🕷","👻","🦇","🕯"], color: Color.orange),
-        Theme<String>(name: "Faces", emojis: ["😀","😃","🤣","🥰","🤪","😎"], color: Color.yellow),
-        Theme<String>(name: "Sports", emojis: ["⚽️","🏀","🏈","⚾️","🎱","🎾"], color: Color.blue),
-        Theme<String>(name: "Animals", emojis: ["🐶","🐱","🐭","🐰","🦊"], color: Color.red),
-        Theme<String>(name: "Insects", emojis: ["🐝","🦋","🐜","🐞","🐛","🪲"], color: Color.black),
+    fileprivate static let stringThemes: Array<Theme<String>> = [
+        Theme<String>(name: "Halloween", emojis: ["🎃","🕷","👻","🦇","🕯"], numberOfCardsToShow: 5, color: Color.orange),
+        Theme<String>(name: "Faces", emojis: ["😀","😃","🤣","🥰","🤪","😎"], numberOfCardsToShow: 6, color: Color.yellow),
+        Theme<String>(name: "Sports", emojis: ["⚽️","🏀","🏈","⚾️","🎱","🎾"], numberOfCardsToShow: 6, color: Color.blue),
+        Theme<String>(name: "Animals", emojis: ["🐶","🐱","🐭","🐰","🦊"], numberOfCardsToShow: 5, color: Color.red),
+        Theme<String>(name: "Insects", emojis: ["🐝","🦋","🐜","🐞","🐛","🪲"], numberOfCardsToShow: 6, color: Color.black),
         Theme<String>(name: "Fruits", emojis: ["🍐","🍎","🍊","🍉","🍇","🍓","🍍","🥝"], numberOfCardsToShow: 8, color: Color.green)
     ]
         
     static func createMemoryGame() -> MemoryGameWrapper<String> {
         let chosenTheme = stringThemes[Int.random(in: 0...stringThemes.count - 1)]
+        print(chosenTheme.json?.utf8 ?? "")
         let emojis: Array<String> = chosenTheme.emojis
         var currentMemoryGame: MemoryGame<String>
         if let cardNumbers = chosenTheme.numberOfCardsToShow {
@@ -32,7 +33,7 @@ class EmojiMemoryGame: ObservableObject {
                 return emojis[pairIndex]
             }
         }
-        return MemoryGameWrapper(memoryGame: currentMemoryGame, themeName: chosenTheme.name, themeColor: chosenTheme.color)
+        return MemoryGameWrapper(memoryGame: currentMemoryGame, themeName: chosenTheme.name, themeColor: Color(chosenTheme.color))
     }
     
     // MARK: - Access to the Model
@@ -69,3 +70,7 @@ struct MemoryGameWrapper<CardContent> where CardContent: Equatable {
     var themeColor: Color
 }
 
+extension Data {
+    // just a simple converter from a Data to a String
+    var utf8: String? { String(data: self, encoding: .utf8 ) }
+}

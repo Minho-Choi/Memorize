@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B40E765525B0AAC3000F242B /* UIColor+RGBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40E765425B0AAC3000F242B /* UIColor+RGBA.swift */; };
 		B47648CB259EFBC10036F0CA /* MemorizeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47648CA259EFBC10036F0CA /* MemorizeApp.swift */; };
 		B47648CD259EFBC10036F0CA /* EmojiMemoryGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47648CC259EFBC10036F0CA /* EmojiMemoryGameView.swift */; };
 		B47648CF259EFBC20036F0CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B47648CE259EFBC20036F0CA /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B40E765425B0AAC3000F242B /* UIColor+RGBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+RGBA.swift"; sourceTree = "<group>"; };
 		B47648C7259EFBC10036F0CA /* Memorize.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memorize.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B47648CA259EFBC10036F0CA /* MemorizeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizeApp.swift; sourceTree = "<group>"; };
 		B47648CC259EFBC10036F0CA /* EmojiMemoryGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMemoryGameView.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				B47648E425A451D10036F0CA /* Grid.swift */,
 				B47648DA259EFEC60036F0CA /* MemoryGame.swift */,
 				B47648DD259EFF660036F0CA /* EmojiMemoryGame.swift */,
+				B40E765425B0AAC3000F242B /* UIColor+RGBA.swift */,
 				B47648EA25A4598A0036F0CA /* Array+Identifiable.swift */,
 				B47648EF25A45FD80036F0CA /* Array+Only.swift */,
 				B47648E725A456060036F0CA /* GridLayout.swift */,
@@ -165,6 +168,7 @@
 				B47648FD25A5C96E0036F0CA /* Pie.swift in Sources */,
 				B47648DB259EFEC70036F0CA /* MemoryGame.swift in Sources */,
 				B47648CD259EFBC10036F0CA /* EmojiMemoryGameView.swift in Sources */,
+				B40E765525B0AAC3000F242B /* UIColor+RGBA.swift in Sources */,
 				B47648CB259EFBC10036F0CA /* MemorizeApp.swift in Sources */,
 				B47648FA25A5C8230036F0CA /* Cardify.swift in Sources */,
 				B47648E825A456060036F0CA /* GridLayout.swift in Sources */,

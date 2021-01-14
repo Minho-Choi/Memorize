@@ -52,13 +52,15 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         cards = Array<Card>()
         for pairIndex in 0..<numberOfPairsOfCards {
             let content = cardContentFactory(pairIndex)
-            cards.append(Card(content: content, id: pairIndex * 2))
-            cards.append(Card(content: content, id: pairIndex * 2 + 1))
+            cards.append(Card(id: pairIndex * 2, content: content))
+            cards.append(Card(id: pairIndex * 2 + 1, content: content))
         }
         cards.shuffle()
     }
     
     struct Card: Identifiable {
+        
+        var id : Int
         var isFaceUp: Bool = false {
             didSet {
                 if isFaceUp {
@@ -75,7 +77,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
         var isSeen: Bool = false
         var content: CardContent
-        var id : Int
         
         // MARK: - Bonus Time
 
@@ -131,22 +132,26 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     }
 }
 
-struct Theme<CardContent>{
+struct Theme<CardContent>: Codable where CardContent: Codable {
     let name: String
     let emojis: Array<CardContent>
     var numberOfCardsToShow: Int?
-    let color: Color
+    let color: UIColor.RGB
     
     init(name: String, emojis: Array<CardContent>, color: Color) {
         self.name = name
         self.emojis = emojis
-        self.color = color
+        self.color = UIColor(color).rgb
         self.numberOfCardsToShow = nil
     }
     
     init(name: String, emojis: Array<CardContent>, numberOfCardsToShow: Int, color: Color) {
         self.init(name: name, emojis: emojis, color: color)
         self.numberOfCardsToShow = numberOfCardsToShow
+    }
+    
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
     }
     
 }
