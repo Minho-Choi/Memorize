@@ -12,11 +12,6 @@ struct EmojiMemoryGameView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                Text(viewModel.name)
-                Spacer()
-                Text("Score: " + String(viewModel.score))
-            }
             Grid(viewModel.cards) { card in
                 CardView(card: card).onTapGesture {
                     withAnimation(.linear(duration: 0.75)) {
@@ -35,6 +30,8 @@ struct EmojiMemoryGameView: View {
         }
         .font(.title)
         .padding()
+        .navigationBarTitle(Text(viewModel.name))
+        .navigationBarItems(trailing: Text("Score: " + String(viewModel.score)))
     }
 }
 
@@ -85,11 +82,11 @@ private struct CardView: View {
         min(size.height, size.width) * 0.7
     }
 }
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        let game = EmojiMemoryGame()
-        game.choose(card: game.cards[0])
-        return EmojiMemoryGameView(viewModel: game)
-    }
-}
+//
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let game = EmojiMemoryGame(store: EmojiMemoryGameStore(), themeID: )
+//        game.choose(card: game.cards[0])
+//        return EmojiMemoryGameView(viewModel: game)
+//    }
+//}

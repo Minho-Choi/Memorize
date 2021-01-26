@@ -132,11 +132,13 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     }
 }
 
-struct Theme<CardContent>: Codable where CardContent: Codable {
-    let name: String
-    let emojis: Array<CardContent>
+struct Theme<CardContent>: Codable, Identifiable where CardContent: Codable {
+    
+    var id: UUID = UUID()
+    var name: String
+    var emojis: Array<CardContent>
     var numberOfCardsToShow: Int?
-    let color: UIColor.RGB
+    var color: UIColor.RGB
     
     init(name: String, emojis: Array<CardContent>, color: Color) {
         self.name = name
@@ -152,6 +154,10 @@ struct Theme<CardContent>: Codable where CardContent: Codable {
     
     var json: Data? {
         return try? JSONEncoder().encode(self)
+    }
+    
+    mutating func rename(to newName: String) {
+        self.name = newName
     }
     
 }
