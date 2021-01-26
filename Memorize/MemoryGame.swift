@@ -160,5 +160,22 @@ struct Theme<CardContent>: Codable, Identifiable where CardContent: Codable {
         self.name = newName
     }
     
+    mutating func addContents(contents: Array<CardContent>, separator: CardContent) where CardContent: Equatable {
+        for content in contents {
+            if content != separator {
+                emojis.append(content)
+            }
+        }
+    }
+    
+    mutating func removeContent(content: CardContent) where CardContent: Equatable {
+        for index in 0..<emojis.count {
+            if emojis[index] == content {
+                emojis.remove(at: index)
+                break
+            }
+        }
+    }
+    
 }
 

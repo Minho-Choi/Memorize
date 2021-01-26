@@ -9,100 +9,52 @@ import SwiftUI
 
 struct EmojiMemoryGameChooserView: View {
     @EnvironmentObject var store: EmojiMemoryGameStore
+    @State private var showAddEditor = false
     @State private var showEditor = false
+    @State private var isInEditMode = false
     
     var body: some View {
         NavigationView {
             VStack {
                 List {
                     ForEach(store.stringThemes) { theme in
-                        CustomNavigationBar(store: store, theme: theme)
+                        CustomNavigationBar(isInEditMode: $isInEditMode, showEditor: $showEditor, store: store, theme: theme)
+                            .popover(isPresented: $showEditor, content: {
+                                EmojiSetEditor(
+                                    store: store,
+                                    themeToAdd: theme,
+                                    showEditor: $showEditor
+                                )
+                                    .frame(minWidth: 300, minHeight: 500)
+                            })
                     }.onDelete(perform: { indexSet in
                         indexSet.map { store.stringThemes[$0] }.forEach { theme in
                             store.removeTheme(theme: theme)
                         }
                     })
+                    
                 }
+                .navigationBarItems(
+                    trailing:
+                        Text(isInEditMode ? "Done":"Edit")
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    .onTapGesture {
+                        withAnimation(.easeIn) {
+                            isInEditMode.toggle()
+                        }
+                })
                 Button("Add New Theme", action: {
-                    showEditor = true
+                    showAddEditor = true
                 })
                 .popover(
-                    isPresented: $showEditor,
+                    isPresented: $showAddEditor,
                     content: {
-                    EmojiSetEditor(showEditor: $showEditor)
-                })
+                        EmojiSetEditor(store: store, themeToAdd: Theme(name: "Enter Theme Name", emojis: [], color: Color.white), showEditor: $showAddEditor)
+                            .frame(minWidth: 300, minHeight: 500)
+                    })
+                
             }
             .navigationTitle(Text("Memorize"))
-        }
-    }
-}
-
-struct CustomNavigationBar: View {
-    var store: EmojiMemoryGameStore
-    var theme: Theme<String>
-    var body: some View {
-        NavigationLink(destination:
-                        EmojiMemoryGameView(viewModel: EmojiMemoryGame(store: store, themeID: theme.id))
-        ) {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(theme.name)
-                        .font(.title)
-                        .padding(.vertical, 2)
-                    HStack {
-                        Image(systemName: "square.grid.2x2.fill")
-                            .imageScale(.large)
-                            .foregroundColor(Color(theme.color))
-                        Text("\(theme.emojis.count * 2) cards")
-                        Text(theme.emojis.joined(separator: ""))
-                    }.font(.headline)
-                }
-            }
-        }
-    }
-}
-
-struct EmojiSetEditor: View {
-    
-    @EnvironmentObject var themeList: EmojiMemoryGameStore
-    @Binding var showEditor: Bool {
-        didSet {
-            
-        }
-    }
-    @State var themeName: String = ""
-    @State var themeToAdd: Theme<String> = Theme(name: "Enter Theme Name", emojis: [], color: Color.black)
-    
-    var body : some View {
-        VStack {
-            ZStack {
-                Text("Add Theme")
-                    .font(.headline)
-                    .padding()
-                HStack {
-                    Spacer()
-                    Button("Done", action: {
-                        showEditor = false
-                    })
-                    .padding()
-                }
-            }
-            Form {
-                Section {
-                    TextField("Theme Name", text: $themeName, onEditingChanged: { began in
-                        if !began {
-                            themeToAdd.rename(to: themeName)
-                        }
-                    })
-                }
-                Section {
-                    TextField("Theme Name", text: $themeName, onEditingChanged: { began in
-                        if !began {
-                            themeToAdd.rename(to: themeName)
-                        }
-                    })
-                }
-            }
         }
     }
 }
