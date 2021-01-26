@@ -28,7 +28,7 @@ struct CustomNavigationBar: View {
                                 }
                             }
                         Image(systemName: "paintbrush")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color(#colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1)))
                             .onTapGesture {
                                 showEditor = true
                             }

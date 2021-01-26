@@ -11,12 +11,6 @@ struct EmojiSetEditor: View {
     var store: EmojiMemoryGameStore
     @State var themeToAdd: Theme<String>
     @Binding var showEditor: Bool {
-        willSet {
-            if themeToAdd.emojis.count < 2 {
-//                print("Must enter at least two emojis")
-                showAlert = true
-            }
-        }
         didSet {
             if !showEditor, themeToAdd.emojis.count >= 2 {
                 store.addNewTheme(theme: themeToAdd)
@@ -33,7 +27,7 @@ struct EmojiSetEditor: View {
     var body : some View {
         VStack {
             ZStack {
-                Text("Add Theme")
+                Text(isEditMode ? "Edit Theme":"Add Theme")
                     .font(.headline)
                     .padding()
                 HStack {
@@ -42,14 +36,6 @@ struct EmojiSetEditor: View {
                         showEditor = false
                     })
                     .padding()
-                    .alert(isPresented: $showAlert, content: {
-                        Alert(
-                            title: Text("Must enter at least two emojis"),
-                            message: Text("Keep on editing theme?"),
-                            primaryButton: .default(Text("Continue")),
-                            secondaryButton: .destructive(Text("Exit"))
-                        )
-                    })
                 }
             }
             Form {
@@ -61,7 +47,7 @@ struct EmojiSetEditor: View {
                     })
                 }
                 Section(header: Text("Emojis")) {
-                    TextField("Enter emojis to add", text: $emojisToAdd, onEditingChanged: { began in
+                    TextField("Insert at least two emojis", text: $emojisToAdd, onEditingChanged: { began in
                         if !began {
                             themeToAdd.addContents(contents: emojisToAdd.map { "\($0)" }, separator: "")
                             emojisToAdd = ""

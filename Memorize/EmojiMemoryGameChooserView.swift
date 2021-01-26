@@ -18,15 +18,22 @@ struct EmojiMemoryGameChooserView: View {
             VStack {
                 List {
                     ForEach(store.stringThemes) { theme in
-                        CustomNavigationBar(isInEditMode: $isInEditMode, showEditor: $showEditor, store: store, theme: theme)
-                            .popover(isPresented: $showEditor, content: {
+                        CustomNavigationBar(
+                            isInEditMode: $isInEditMode,
+                            showEditor: $showEditor,
+                            store: store,
+                            theme: theme
+                        )
+                            .sheet(
+                                isPresented: $showEditor,
+                                content: {
                                 EmojiSetEditor(
                                     store: store,
                                     themeToAdd: theme,
                                     showEditor: $showEditor
-                                )
-                                    .frame(minWidth: 300, minHeight: 500)
-                            })
+                                ).frame(minWidth: 300, minHeight: 500)
+                            }
+                        )
                     }.onDelete(perform: { indexSet in
                         indexSet.map { store.stringThemes[$0] }.forEach { theme in
                             store.removeTheme(theme: theme)
@@ -46,13 +53,21 @@ struct EmojiMemoryGameChooserView: View {
                 Button("Add New Theme", action: {
                     showAddEditor = true
                 })
-                .popover(
+                .padding()
+                .sheet(
                     isPresented: $showAddEditor,
                     content: {
-                        EmojiSetEditor(store: store, themeToAdd: Theme(name: "Enter Theme Name", emojis: [], color: Color.white), showEditor: $showAddEditor)
-                            .frame(minWidth: 300, minHeight: 500)
-                    })
-                
+                        EmojiSetEditor(
+                            store: store,
+                            themeToAdd: Theme(
+                                name: "Enter Theme Name",
+                                emojis: [],
+                                color: Color.gray
+                            ),
+                            showEditor: $showAddEditor
+                        ).frame(minWidth: 300, minHeight: 500)
+                    }
+                )
             }
             .navigationTitle(Text("Memorize"))
         }
