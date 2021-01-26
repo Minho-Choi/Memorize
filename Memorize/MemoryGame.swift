@@ -139,6 +139,18 @@ struct Theme<CardContent>: Codable, Identifiable where CardContent: Codable {
     var emojis: Array<CardContent>
     var numberOfCardsToShow: Int?
     var color: UIColor.RGB
+    var isUsingAllCards: Bool {
+        get {
+            numberOfCardsToShow != nil
+        }
+        set {
+            if newValue {
+                numberOfCardsToShow = emojis.count
+            } else {
+                numberOfCardsToShow = nil
+            }
+        }
+    }
     
     init(name: String, emojis: Array<CardContent>, color: Color) {
         self.name = name

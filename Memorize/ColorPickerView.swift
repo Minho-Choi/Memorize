@@ -11,35 +11,35 @@ struct ColorPickerView: View {
     
     var presetColors = [Color.black, Color.blue, Color.red, Color.yellow, Color.pink, Color.orange, Color.green, Color.gray, Color.purple]
     
-    @Binding var themeColor: Color
+    @Binding var themeColor: UIColor.RGB
+    @State var themeColorC: Color
     
     var body: some View {
         VStack {
-            HStack {
-                GeometryReader { geometry in
-                    Group {
-                        ScrollView(.horizontal, showsIndicators: true) {
-                            HStack {
-                                ForEach(presetColors, id: \.self) { color in
-                                    Rectangle()
-                                        .foregroundColor(color)
-                                        .frame(
-                                            width: geometry.size.width * 0.1,
-                                            height: geometry.size.height,
-                                            alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                        .padding(geometry.size.width * 0.002)
-                                        .onTapGesture {
-                                            themeColor = color
-                                        }
+            GeometryReader { geometry in
+                ScrollView(.horizontal, showsIndicators: true) {
+                    HStack {
+                        ForEach(presetColors, id: \.self) { color in
+                            Rectangle()
+                                .foregroundColor(color)
+                                .frame(
+                                    width: geometry.size.width * 0.1,
+                                    height: geometry.size.height,
+                                    alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .padding(geometry.size.width * 0.002)
+                                .onTapGesture {
+                                    themeColor = UIColor(color).rgb
+                                    themeColorC  = color
                                 }
-                            }
                         }
                     }
                 }
             }
             Divider()
-            ColorPicker(selection: $themeColor, label: {
+            ColorPicker(selection: $themeColorC, label: {
                 Text("Custom Colors")
+            }).onChange(of: themeColorC, perform: { value in
+                themeColor = UIColor(value).rgb
             })
         }
     }
