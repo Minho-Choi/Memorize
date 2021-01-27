@@ -24,16 +24,6 @@ struct EmojiMemoryGameChooserView: View {
                             store: store,
                             theme: theme
                         )
-                            .sheet(
-                                isPresented: $showEditor,
-                                content: {
-                                EmojiSetEditor(
-                                    store: store,
-                                    themeToAdd: theme,
-                                    showEditor: $showEditor
-                                ).frame(minWidth: 300, minHeight: 500)
-                            }
-                        )
                     }.onDelete(perform: { indexSet in
                         indexSet.map { store.stringThemes[$0] }.forEach { theme in
                             store.removeTheme(theme: theme)

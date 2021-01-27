@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 class EmojiMemoryGameStore: ObservableObject {
 
@@ -17,6 +18,19 @@ class EmojiMemoryGameStore: ObservableObject {
         Theme<String>(name: "Insects", emojis: ["🐝","🦋","🐜","🐞","🐛","🪲"], numberOfCardsToShow: 6, color: Color.black),
         Theme<String>(name: "Fruits", emojis: ["🍐","🍎","🍊","🍉","🍇","🍓","🍍","🥝"], numberOfCardsToShow: 8, color: Color.green)
     ]
+    
+    private var autosave: AnyCancellable?
+    
+    init() {
+        let defaultsKey = "Themes"
+        let storedStringThemes = Array(fromJSONArray: UserDefaults.standard.object(forKey: defaultsKey))
+        if !storedStringThemes.isEmpty {
+            stringThemes = storedStringThemes
+        }
+        autosave = $stringThemes.sink { themes in
+            UserDefaults.standard.set(themes.asJSONArray, forKey: defaultsKey)
+        }
+    }
     
     public func renameTheme(which originalThemeName: String, to themeName: String) {
         for index in 0..<stringThemes.count {
@@ -54,6 +68,17 @@ class EmojiMemoryGameStore: ObservableObject {
         return false
     }
     
+    public func searchTheme(themeID: UUID) -> Theme<String>? {
+        for existingTheme in stringThemes {
+            print(existingTheme.name)
+            if existingTheme.id == themeID {
+                return existingTheme
+            }
+        }
+        print("No Theme Found")
+        return nil
+    }
+    
     func createMemoryGame(selectedThemeID: UUID?) -> MemoryGameWrapper<String> {
         var chosenTheme = stringThemes[Int.random(in: 0...stringThemes.count - 1)]
         for theme in stringThemes {
@@ -86,4 +111,26 @@ struct MemoryGameWrapper<CardContent> where CardContent: Equatable {
 extension Data {
     // just a simple converter from a Data to a String
     var utf8: String? { String(data: self, encoding: .utf8 ) }
+}
+
+extension Array where Element == Theme<String> {
+    var asJSONArray: [Data] {
+        var JSONArray = [Data]()
+        for element in self {
+            if let jsonUnwrapped = element.json {
+                JSONArray.append(jsonUnwrapped)
+            }
+        }
+        return JSONArray
+    }
+    
+    init(fromJSONArray jsonArray: Any?) {
+        self.init()
+        let jsonToTheme = jsonArray as? [Data] ?? []
+        for json in jsonToTheme {
+            if let theme = try? JSONDecoder().decode(Theme<String>.self, from: json) {
+                self.append(theme)
+            }
+        }
+    }
 }
